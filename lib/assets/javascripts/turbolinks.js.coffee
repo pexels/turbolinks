@@ -153,7 +153,6 @@ changePage = (doc, options) ->
     document.body = targetBody
     onNodeRemoved(currentBody)
     CSRFToken.update csrfToken if csrfToken?
-    setAutofocusElement()
     changedNodes = [targetBody]
 
   scriptsToRun = if options.runScripts is false then 'script[data-turbolinks-eval="always"]' else 'script:not([data-turbolinks-eval="false"])'
@@ -209,12 +208,6 @@ executeScriptTags = (selector) ->
     parentNode.removeChild script
     parentNode.insertBefore copy, nextSibling
   return
-
-# Firefox bug: Doesn't autofocus fields that are inserted via JavaScript
-setAutofocusElement = ->
-  autofocusElement = (list = document.querySelectorAll 'input[autofocus], textarea[autofocus]')[list.length - 1]
-  if autofocusElement and document.activeElement isnt autofocusElement
-    autofocusElement.focus()
 
 reflectNewUrl = (url) ->
   if (url = new ComponentUrl url).absolute isnt referer
